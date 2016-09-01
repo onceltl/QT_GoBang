@@ -10,6 +10,11 @@
     <height>641</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>20</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -17,8 +22,8 @@
    <widget class="QWidget" name="verticalLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>10</y>
+      <x>80</x>
+      <y>20</y>
       <width>371</width>
       <height>31</height>
      </rect>
@@ -26,8 +31,13 @@
     <layout class="QVBoxLayout" name="RoomTextLayout">
      <item>
       <widget class="QLabel" name="RoomText">
+       <property name="font">
+        <font>
+         <pointsize>15</pointsize>
+        </font>
+       </property>
        <property name="text">
-        <string/>
+        <string>的</string>
        </property>
       </widget>
      </item>
@@ -41,6 +51,11 @@
       <width>500</width>
       <height>500</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
     </property>
    </widget>
    <widget class="QWidget" name="layoutWidget">

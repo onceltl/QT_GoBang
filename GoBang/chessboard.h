@@ -8,11 +8,16 @@ class ChessBoard : public QWidget
 public:
     explicit ChessBoard(QWidget *parent = 0);
     ~ChessBoard();
+    void readychange(bool ok){isready=ok;}
+    void clear();
 private:
 
     QPoint find(QPoint p);
+    void setColor(int sytle);
+    void check();
 signals:
-
+    void getPoint(QPoint);
+    void getWin();
 public slots:
 protected:
     void paintEvent(QPaintEvent *e);
@@ -21,8 +26,14 @@ protected:
 private:
     int len;
     QPoint ChessPoint[16][16];
-    int  Chess[16][16];
     QPoint StartPoint,EndPoint;
+    bool isready;
+    int movex[6]={0,0,0,0,0,0};
+    int movey[6];
+public:
+
+    int mycolor;
+    int  Chess[16][16];
 };
 
 #endif // CHESSBOARD_H

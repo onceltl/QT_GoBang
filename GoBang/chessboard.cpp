@@ -4,16 +4,23 @@
 #include <QBrush>
 #include <QDebug>
 #include <QMouseEvent>
-
-ChessBoard::ChessBoard(QWidget *parent) : QWidget(parent)
+void ChessBoard::clear()
 {
+    mycolor=2;
     len=30;
+    isready=0;
     for (int i=1;i<=15;i++)
         for (int j=1;j<=15;j++)
         {
             ChessPoint[i][j]=QPoint(i*len,j*len);
             Chess[i][j]=0;
         }
+}
+ChessBoard::ChessBoard(QWidget *parent) : QWidget(parent)
+{
+    clear();
+    connect(this,SIGNAL(getPoint(QPoint)),parent->parent(),SLOT(sendPoint(QPoint)));
+    connect(this,SIGNAL(getWin()),parent->parent(),SLOT(haveWin()));
 }
 
 ChessBoard::~ChessBoard()
@@ -37,11 +44,17 @@ void ChessBoard::paintEvent(QPaintEvent *e)
     {
         p.drawLine(QPoint(len,y),QPoint(len*15,y));
     }
+    p.setBrush(QBrush(Qt::black));
+    p.drawEllipse(ChessPoint[4][4],3,3);
+    p.drawEllipse(ChessPoint[4][12],3,3);
+    p.drawEllipse(ChessPoint[12][4],3,3);
+    p.drawEllipse(ChessPoint[12][12],3,3);
+    p.drawEllipse(ChessPoint[8][8],3,3);
     for (int i=1;i<=15;i++)
         for (int j=1;j<=15;j++)
         if (Chess[i][j])
         {
-            if (Chess[i][j]==1) p.setBrush(QBrush(Qt::black));
+            if (Chess[i][j]==2) p.setBrush(QBrush(Qt::black));
                 else p.setBrush(QBrush(Qt::white));
             p.drawEllipse(ChessPoint[i][j],len/2,len/2);
         }
@@ -55,15 +68,19 @@ void ChessBoard::mousePressEvent(QMouseEvent *event)
 }
 void ChessBoard::mouseReleaseEvent(QMouseEvent *event)
 {
+    if (!isready) return;
     if (event->button()==Qt::LeftButton)
     {
         EndPoint=event->pos();
         if ((StartPoint-EndPoint).manhattanLength()<=10)
         {
             QPoint Right=find(StartPoint);
-            Chess[Right.rx()][Right.ry()]=2;
+            Chess[Right.rx()][Right.ry()]=mycolor;
+            emit(getPoint(Right));
         }
         update();
+        isready=0;
+        check();
     }
 }
 QPoint ChessBoard::find(QPoint p)
@@ -81,4 +98,30 @@ QPoint ChessBoard::find(QPoint p)
                 }
             }
    return near;
+}
+void ChessBoard::check()
+{
+    for (int k=0;k<6;k++)
+        for (int i=1;i<=15;i++)
+            for (int j=1;j<=15;j++)
+                if (Chess[i][j]==mycolor)
+                {
+                    bool ok=1;
+                    for(int len=1;len<=4;len++)
+                       {
+                        int nx=i+movex[k]*len;
+                        int ny=j+movey[k]*len;
+                        if (!(nx>=1&&nx<=15&&ny>=1&&ny<=15&&Chess[nx][ny]==mycolor)) ok=0;
+                       }
+                    if (ok)
+                    {
+                        emit(getWin());
+                        return;
+                    }
+                }
+}
+
+void ChessBoard::setColor(int sytle)
+{
+    mycolor=sytle;
 }
