@@ -26,3 +26,6 @@ HEADERS  += mainwindow.h \
 FORMS    += mainwindow.ui \
     adddialog.ui \
     linkdialog.ui
+
+RESOURCES += \
+    res.qrc

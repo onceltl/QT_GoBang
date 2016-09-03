@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/images">
+        <file alias="boom">ooopic_1472626615.ico</file>
+    </qresource>
+</RCC>

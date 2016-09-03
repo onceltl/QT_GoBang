@@ -26,6 +26,8 @@ private slots:
     void sendPoint(QPoint);
     void on_StartButton_clicked();
     void haveWin();
+    void on_WarnButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QTcpServer *Listen;
